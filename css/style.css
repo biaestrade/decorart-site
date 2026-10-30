@@ -1,0 +1,280 @@
+/* Cores e fontes tiradas do site original (Elementor) */
+:root {
+  --verde: #2E442D;
+  --verde-hover: #336331;
+  --verde-escuro: #1F331E;
+  --verde-aba: #4C664B;
+  --verde-claro: #B5D8B3;
+  --whats: #2DB742;
+  --whats-hover: #279B38;
+  --branco: #FFFFFF;
+  --cinza: #777777;
+  --max: 1222px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Montserrat', Arial, sans-serif;
+  color: var(--verde);
+  background: var(--branco);
+  line-height: 1.6;
+}
+img { max-width: 100%; display: block; }
+a { color: inherit; }
+.container { width: 100%; max-width: var(--max); margin: 0 auto; padding: 0 16px; }
+
+/* ---------- Topo ---------- */
+.topo { position: sticky; top: 0; z-index: 50; background: var(--branco); box-shadow: 0 1px 8px rgba(0,0,0,.06); }
+.topo .container { display: flex; align-items: center; justify-content: space-between; min-height: 90px; gap: 16px; }
+.topo .logo img { height: 56px; width: auto; }
+.menu { display: flex; list-style: none; }
+.menu a {
+  display: block; padding: 16px 17px; text-decoration: none;
+  font-family: 'Roboto Condensed', 'Arial Narrow', Arial, sans-serif; font-size: 15px; font-weight: 400;
+  text-transform: uppercase; color: var(--verde);
+}
+.menu a:hover { color: var(--verde-hover); }
+.sociais { display: flex; gap: 8px; }
+.sociais a {
+  width: 34px; height: 34px; border-radius: 50%;
+  display: grid; place-items: center;
+  background: var(--verde); color: var(--branco); transition: opacity .2s;
+}
+.sociais a:hover { opacity: .85; }
+.sociais svg { width: 16px; height: 16px; fill: currentColor; }
+.botao-menu { display: none; background: none; border: 0; cursor: pointer; padding: 8px; }
+.botao-menu span { display: block; width: 24px; height: 2px; background: var(--verde); margin: 5px 0; }
+
+/* ---------- Topo da home (foto + digitação) ---------- */
+.hero {
+  position: relative; color: var(--branco);
+  background: #000 url('../img/2025/07/modern-living-room-interior-design-1536x1024.jpg') center / cover no-repeat;
+  min-height: 512px; display: flex; align-items: center;
+}
+.hero::before { content: ''; position: absolute; inset: 0; background: rgba(0,0,0,.67); }
+.hero .container { position: relative; display: flex; justify-content: space-between; align-items: center; gap: 40px; padding-top: 40px; padding-bottom: 40px; }
+.hero h1 { text-transform: uppercase; font-weight: 400; font-size: 32px; line-height: 1.3; }
+.hero h1 .digitando {
+  display: block; font-weight: 800; font-size: 58px; line-height: 78px; min-height: 78px; white-space: nowrap;
+}
+.hero h1 .digitando::after { content: '|'; font-weight: 300; animation: piscar .8s steps(1) infinite; margin-left: 2px; }
+@keyframes piscar { 50% { opacity: 0; } }
+.hero .logo-hero { flex: 0 0 auto; }
+.hero .logo-hero img { width: 340px; }
+
+.botao {
+  display: inline-block; margin-top: 28px; padding: 14px 36px; border: 0; cursor: pointer;
+  border-radius: 50px; background: var(--branco); color: var(--verde);
+  font-family: 'Montserrat', sans-serif; font-size: 19px; font-weight: 700; text-transform: uppercase;
+  text-decoration: none; transition: background .2s, color .2s;
+}
+.botao:hover { background: var(--verde-claro); }
+.botao.verde {
+  background: var(--verde); color: var(--branco);
+  font-family: 'Roboto', sans-serif; font-size: 21px; font-weight: 600; padding: 11px 30px;
+}
+.botao.verde:hover { background: var(--verde-hover); }
+.botao.whats {
+  background: var(--whats); color: var(--branco); display: inline-flex; align-items: center; gap: 10px;
+  font-family: 'Roboto', sans-serif; font-size: 21px; font-weight: 500;
+}
+.botao.whats:hover { background: var(--whats-hover); }
+.botao.whats svg { width: 22px; height: 22px; fill: currentColor; }
+
+/* ---------- Seções ---------- */
+section { scroll-margin-top: 90px; }
+.titulo-secao { text-align: center; font-size: 27px; font-weight: 700; color: var(--verde); }
+
+/* ---------- Galeria de trabalhos ---------- */
+.trabalhos { padding: 70px 0; }
+.filtros { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px 40px; margin: 40px 0 25px; list-style: none; }
+.filtros button {
+  font-family: 'Roboto', sans-serif; font-size: 18px; font-weight: 400; text-transform: uppercase;
+  padding: 8px 25px; border: 0; border-radius: 50px; cursor: pointer;
+  background: var(--verde); color: var(--branco); transition: background .2s;
+}
+.filtros button:hover, .filtros button.ativo { background: var(--verde-hover); }
+.galeria { display: grid; grid-template-columns: repeat(6, 1fr); gap: 5px; }
+.galeria a { display: block; overflow: hidden; border-radius: 5px; aspect-ratio: 1 / 1; background: #eee; position: relative; animation: aparecer .4s ease; }
+.galeria img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s; }
+.galeria a::after {
+  content: ''; position: absolute; inset: 0; background: rgba(46,68,45,.45) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M10 2a8 8 0 016.3 12.9l5.4 5.4-1.4 1.4-5.4-5.4A8 8 0 1110 2zm0 2a6 6 0 100 12 6 6 0 000-12zm1 2v3h3v2h-3v3H9v-3H6V9h3V6h2z'/%3E%3C/svg%3E") center / 35px no-repeat;
+  opacity: 0; transition: opacity .3s;
+}
+.galeria a:hover::after { opacity: 1; }
+.galeria a:hover img { transform: scale(1.06); }
+@keyframes aparecer { from { opacity: 0; transform: scale(.96); } to { opacity: 1; transform: none; } }
+.centro { text-align: center; }
+.centro .botao.verde { margin-top: 40px; }
+
+/* ---------- Quem somos / Instalação ---------- */
+.sobre, .instalacao { min-height: 480px; display: flex; align-items: center; padding: 50px 0; }
+.sobre { background: var(--verde); color: var(--branco); }
+.sobre .titulo-secao { color: var(--branco); font-weight: 600; }
+.instalacao .titulo-secao { font-weight: 600; }
+.texto {
+  max-width: 1000px; margin: 20px auto 0; padding: 10px;
+  text-align: center; font-size: 16px; font-weight: 300; line-height: 1.7;
+}
+.texto p + p { margin-top: 13px; }
+.texto strong { font-weight: 700; }
+
+/* ---------- Chamada final ---------- */
+.chamada {
+  position: relative; color: var(--branco); padding: 40px 0;
+  background: url('../img/2024/11/flat-lay-tiling-floor-concept.webp') center / cover no-repeat;
+}
+.chamada::before {
+  content: ''; position: absolute; inset: 0; opacity: .95;
+  background: linear-gradient(180deg, rgba(46,68,45,.6) 40%, #1F301E 100%);
+  mix-blend-mode: multiply;
+}
+.chamada .container { position: relative; display: flex; align-items: center; gap: 40px; }
+.chamada .logo-chamada { flex: 0 0 34%; }
+.chamada .logo-chamada img { width: 100%; max-width: 380px; margin: 0 auto; }
+.chamada h2 { font-size: 28px; font-weight: 700; }
+.chamada p { font-size: 24px; font-weight: 300; margin-top: 10px; line-height: 1.4; }
+.chamada p strong { font-weight: 700; }
+
+/* ---------- Rodapé ---------- */
+.rodape { background: var(--verde); color: var(--branco); padding: 30px 0; }
+/* Espaço para o botão flutuante do WhatsApp não cobrir os contatos */
+.rodape .container { padding-right: 96px; }
+.rodape .container { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 20px; }
+.rodape .sociais a { background: #7C7C7C; }
+.rodape .contatos { font-family: Helvetica, Arial, sans-serif; font-size: 16px; text-align: right; }
+.rodape .contatos strong { display: block; }
+.rodape a { text-decoration: none; }
+.rodape a:hover { text-decoration: underline; }
+
+/* ---------- Botão flutuante WhatsApp ---------- */
+.whats-flutuante {
+  position: fixed; right: 20px; bottom: 20px; z-index: 60;
+  width: 60px; height: 60px; border-radius: 50%;
+  background: var(--whats); color: #fff; display: grid; place-items: center;
+  box-shadow: 0 4px 14px rgba(0,0,0,.25); transition: transform .2s;
+}
+.whats-flutuante:hover { transform: scale(1.08); }
+.whats-flutuante svg { width: 32px; height: 32px; fill: currentColor; }
+
+/* ---------- Foto ampliada ---------- */
+.lightbox { position: fixed; inset: 0; z-index: 100; background: rgba(0,0,0,.88); display: none; align-items: center; justify-content: center; padding: 16px; }
+.lightbox.aberta { display: flex; }
+.lightbox img { max-height: 88vh; max-width: 100%; border-radius: 6px; background: #fff; }
+.lightbox .fechar { position: absolute; top: 12px; right: 18px; background: none; border: 0; color: #fff; font-size: 42px; cursor: pointer; }
+.lightbox .seta { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,.15); border: 0; color: #fff; font-size: 34px; width: 48px; height: 48px; border-radius: 50%; cursor: pointer; }
+.lightbox .seta:hover { background: rgba(255,255,255,.3); }
+.lightbox .anterior { left: 16px; }
+.lightbox .proxima { right: 16px; }
+.lightbox .legenda { position: absolute; bottom: 18px; left: 0; right: 0; text-align: center; color: #fff; font-weight: 700; }
+
+/* ---------- Página Papel de Parede (fiel ao widget original) ---------- */
+.titulo-duplo { padding: 34px 0 0; text-align: center; }
+.titulo-duplo h1 {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-size: 36px; font-weight: 700; line-height: 1.3; text-transform: uppercase; color: var(--cinza);
+}
+.titulo-duplo h1 span { color: var(--verde); }
+.titulo-duplo p {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  margin-top: 16px; font-size: 15px; color: #4d4d4d;
+}
+.filtros.filtros-catalogo { gap: 6px 4px; margin: 50px 0 30px; }
+.filtros.filtros-catalogo button {
+  font-family: 'Montserrat', sans-serif; font-size: 14px; font-weight: 400; text-transform: uppercase;
+  padding: 5px 15px; border-radius: 3px; background: transparent; color: #7a7a7a;
+}
+.filtros.filtros-catalogo button:hover, .filtros.filtros-catalogo button.ativo { background: var(--verde); color: var(--branco); }
+.catalogo { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; }
+.catalogo figure { animation: aparecer .5s ease; }
+.catalogo figure[hidden] { display: none; }
+.catalogo a { display: block; overflow: hidden; border-radius: 8px; aspect-ratio: 1 / 1; background: #eee; position: relative; }
+.catalogo a::after { content: ''; position: absolute; inset: 0; background: rgba(0,0,0,.25); opacity: 0; transition: opacity .3s; }
+.catalogo a:hover::after { opacity: 1; }
+.catalogo img { width: 100%; height: 100%; object-fit: cover; }
+.catalogo figcaption { padding: 8px 4px 0; font-weight: 600; text-align: center; font-size: 15px; color: var(--verde); }
+.catalogo-secao .botao.verde {
+  font-family: 'Montserrat', sans-serif; font-weight: 500; font-size: 15px; border-radius: 3px;
+  padding: 10px 26px; box-shadow: inset 0 0 14px rgba(0,0,0,.5);
+}
+.catalogo-secao { padding: 10px 0 60px; }
+
+.abas-info { width: 84%; max-width: 1100px; margin: 60px auto 70px; }
+.abas-info .botoes { display: flex; flex-wrap: wrap; }
+.abas-info .botoes button {
+  flex: 1 1 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-size: 16px; font-weight: 400;
+  margin: 1px; padding: 14px 10px; border: 0; border-radius: 3px; cursor: pointer;
+  color: var(--branco); background: var(--verde-escuro); position: relative;
+}
+.abas-info .botoes button.ativa { background: var(--verde-aba); border-radius: 4px; }
+.abas-info .botoes button.ativa::after {
+  content: ''; position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%);
+  border: 8px solid transparent; border-bottom: 0; border-top-color: var(--verde-aba);
+}
+.abas-info .botoes svg { width: 18px; height: 18px; fill: currentColor; }
+.abas-info .painel {
+  padding: 30px; background: var(--branco); color: var(--verde); border-radius: 0 0 15px 0;
+  font-family: 'Montserrat', sans-serif; font-size: 16px; line-height: 1.7;
+}
+.abas-info .painel[hidden] { display: none; }
+.abas-info .painel p + p, .abas-info .painel ul + p, .abas-info .painel p + ul { margin-top: 12px; }
+.abas-info .painel ul, .abas-info .painel ol { padding-left: 22px; }
+.abas-info .painel li + li { margin-top: 10px; }
+
+/* ---------- Telas intermediárias (notebook, tablet, celular) ---------- */
+@media (max-width: 1320px) {
+  .container { padding-left: clamp(28px, 6vw, 72px); padding-right: clamp(28px, 6vw, 72px); }
+  .rodape .container { padding-right: max(96px, 6vw); }
+  .hero h1 { font-size: clamp(20px, 2.5vw, 32px); }
+  .hero h1 .digitando { font-size: clamp(32px, 4.4vw, 58px); line-height: 1.35; min-height: 1.35em; }
+  .hero .logo-hero img { width: clamp(180px, 24vw, 340px); }
+  .botao { font-size: clamp(15px, 1.5vw, 19px); }
+  .chamada .logo-chamada { flex-basis: 30%; }
+  .chamada h2 { font-size: clamp(22px, 2.2vw, 28px); }
+  .chamada p { font-size: clamp(17px, 1.8vw, 24px); }
+  .botao.verde, .botao.whats { font-size: clamp(15px, 1.6vw, 21px); }
+  .filtros { gap: 10px clamp(8px, 2vw, 40px); }
+  .filtros button { font-size: clamp(13px, 1.4vw, 18px); }
+  .abas-info { width: auto; margin-left: clamp(28px, 6vw, 72px); margin-right: clamp(28px, 6vw, 72px); }
+}
+
+/* ---------- Tablet e celular ---------- */
+@media (max-width: 1024px) {
+  .galeria { grid-template-columns: repeat(3, 1fr); }
+  .menu a { padding: 12px clamp(8px, 1.2vw, 17px); font-size: 14px; }
+}
+@media (max-width: 900px) {
+  .botao-menu { display: block; }
+  .menu {
+    display: none; position: absolute; top: 90px; left: 0; right: 0;
+    flex-direction: column; background: var(--branco); box-shadow: 0 6px 12px rgba(0,0,0,.08);
+  }
+  .menu.aberto { display: flex; }
+  .menu a { padding: 14px 16px; border-top: 1px solid #eee; }
+  .topo .sociais { display: none; }
+  .hero .container { flex-direction: column-reverse; text-align: center; }
+  .hero .logo-hero img { width: 180px; }
+  .hero h1 { font-size: 22px; }
+  .hero h1 .digitando { font-size: 36px; line-height: 48px; min-height: 48px; white-space: normal; }
+  .chamada .container { flex-direction: column; text-align: center; }
+  .chamada .logo-chamada img { max-width: 200px; }
+  .chamada h2 { font-size: 24px; }
+  .chamada p { font-size: 19px; }
+  .rodape { padding-bottom: 100px; }
+  .rodape .container { flex-direction: column; text-align: center; padding-right: clamp(28px, 6vw, 72px); }
+  .rodape .contatos { text-align: center; }
+}
+@media (max-width: 600px) {
+  .galeria { gap: 4px; }
+  .filtros { gap: 8px 2px; }
+  .filtros button { font-size: 12px; padding: 8px 12px; }
+  .botao.verde, .botao.whats { font-size: 16px; }
+  .abas-info .botoes button { flex-basis: 40%; padding: 14px 0; }
+  .abas-info .botoes button.ativa::after { display: none; }
+  .titulo-duplo { padding-top: 25px; }
+  .titulo-duplo h1 { font-size: 26px; }
+  .catalogo { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+}

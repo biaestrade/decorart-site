@@ -1,0 +1,41 @@
+# Robô que copia as fotos do site antigo (WordPress) para dentro deste repositório.
+# Como usar: aba "Actions" -> "Copiar fotos do site antigo" -> botão "Run workflow".
+# Pode rodar mais de uma vez: ele só baixa o que ainda estiver faltando.
+name: Copiar fotos do site antigo
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  copiar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Baixar fotos
+        run: |
+          ok=0; falhou=0
+          : > faltando.txt
+          while IFS=$'\t' read -r url destino; do
+            case "$url" in ''|\#*) continue;; esac
+            if [ -s "$destino" ]; then continue; fi
+            mkdir -p "$(dirname "$destino")"
+            if curl -fsSL --retry 2 -A "Mozilla/5.0" -o "$destino" "$url"; then
+              ok=$((ok+1))
+            else
+              rm -f "$destino"; falhou=$((falhou+1)); echo "$url" >> faltando.txt
+            fi
+          done < imagens.txt
+          echo "Baixadas: $ok | Falharam: $falhou"
+          if [ -s faltando.txt ]; then echo "Não encontradas:"; cat faltando.txt; fi
+
+      - name: Salvar no repositório
+        run: |
+          git config user.name "copiar-fotos"
+          git config user.email "copiar-fotos@users.noreply.github.com"
+          git add img faltando.txt
+          git commit -m "Fotos copiadas do site antigo" || echo "Nada novo para salvar"
+          git push
