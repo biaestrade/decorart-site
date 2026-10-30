@@ -125,7 +125,7 @@ window.CATALOGO = [
   {"nome": "D003AKS", "foto": "2025/09/H2910404.jpg", "cat": ["Infantil"]},
   {"nome": "H2910402", "foto": "2025/09/H2910402.jpg", "cat": ["Infantil"]},
   {"nome": "D007AKS", "foto": "2025/09/H2910504.jpg", "cat": ["Infantil"]},
-  {"nome": "D002AKS", "foto": "2025/09/D002AKS.jpg", "cat": []},
+  {"nome": "D002AKS", "foto": "2025/09/D002AKS-1.avif", "cat": []},
   {"nome": "D001AKS", "foto": "2025/09/H29104011.jpg", "cat": ["Infantil"]},
   {"nome": "Revoada 66", "foto": "2025/07/4464.jpg", "cat": []},
   {"nome": "Revoada 65", "foto": "2025/07/4463.jpg", "cat": []},
