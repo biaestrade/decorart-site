@@ -128,8 +128,8 @@ section { scroll-margin-top: 90px; }
   background: url('../img/2024/11/flat-lay-tiling-floor-concept.webp') center / cover no-repeat;
 }
 .chamada::before {
-  content: ''; position: absolute; inset: 0; opacity: .95;
-  background: linear-gradient(180deg, rgba(46,68,45,.6) 40%, #1F301E 100%);
+  content: ''; position: absolute; inset: 0; opacity: 1;
+  background: linear-gradient(180deg, rgba(31,48,30,.82) 30%, #172416 100%);
   mix-blend-mode: multiply;
 }
 .chamada .container { position: relative; display: flex; align-items: center; gap: 40px; }
