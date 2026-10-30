@@ -259,10 +259,17 @@ section { scroll-margin-top: 90px; }
   .topo .sociais { display: none; }
   .hero .container { flex-direction: column-reverse; text-align: center; }
   .hero .logo-hero img { width: 180px; }
+  /* Só no celular: corta o espaço vazio da imagem do logo e aproxima do texto */
+  .hero .container { gap: 14px; }
+  .hero .logo-hero img { height: 100px; object-fit: cover; object-position: 50% 48%; }
   .hero h1 { font-size: 22px; }
   .hero h1 .digitando { font-size: 36px; line-height: 48px; min-height: 48px; white-space: normal; }
   .chamada .container { flex-direction: column; text-align: center; }
   .chamada .logo-chamada img { max-width: 200px; }
+  /* Só no celular: logo da chamada final mais perto do texto */
+  .chamada .container { gap: 14px; }
+  .chamada .logo-chamada { flex-basis: auto; }
+  .chamada .logo-chamada img { width: 180px; height: 100px; object-fit: cover; object-position: 50% 48%; }
   .chamada h2 { font-size: 24px; }
   .chamada p { font-size: 19px; }
   .rodape { padding-bottom: 100px; }
