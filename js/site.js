@@ -96,8 +96,10 @@ document.addEventListener('keydown', e => {
 });
 
 // Filtros + "Veja mais" (usado na galeria da home e no catálogo)
-function montarGrade({ grade, filtros, botaoMais, itens, porVez, categoriaInicial, desenhar }) {
-  let categoria = categoriaInicial, limite = porVez;
+function montarGrade({ grade, filtros, botaoMais, itens, porVez, primeiraVez, categoriaInicial, desenhar }) {
+  const qtd = v => (typeof v === 'function' ? v() : v);
+  const inicial = () => qtd(primeiraVez || porVez);
+  let categoria = categoriaInicial, limite = inicial();
   function atualizar() {
     const lista = itens.filter(it => !categoria || it.cats.includes(categoria));
     grade.innerHTML = lista.slice(0, limite).map(desenhar).join('');
@@ -109,12 +111,18 @@ function montarGrade({ grade, filtros, botaoMais, itens, porVez, categoriaInicia
       if (!b) return;
       filtros.querySelectorAll('button').forEach(x => x.classList.toggle('ativo', x === b));
       categoria = b.dataset.cat || null;
-      limite = porVez;
+      limite = inicial();
       atualizar();
     });
   }
-  if (botaoMais) botaoMais.addEventListener('click', () => { limite += porVez; atualizar(); });
+  if (botaoMais) botaoMais.addEventListener('click', () => { limite += qtd(porVez); atualizar(); });
   atualizar();
+}
+
+// Quantas fotos cabem numa linha da grade
+function colunas(grade) {
+  const c = getComputedStyle(grade).gridTemplateColumns.split(' ').filter(Boolean).length;
+  return c || 6;
 }
 
 // Galeria da home: fotos embaralhadas, 12 por vez, começa em Papel de Parede
@@ -125,7 +133,8 @@ if (galeria && window.FOTOS) {
   const itens = window.FOTOS.map(f => ({ ...f, cats: [f.cat] })).sort(() => Math.random() - .5);
   montarGrade({
     grade: galeria, filtros, botaoMais: document.querySelector('#galeria-mais'),
-    itens, porVez: 12, categoriaInicial: window.CATEGORIAS[0],
+    // Mostra só a primeira linha; cada "Veja Mais" acrescenta mais duas linhas
+    itens, primeiraVez: () => colunas(galeria), porVez: () => colunas(galeria) * 2, categoriaInicial: window.CATEGORIAS[0],
     desenhar: f => `<a href="${foto(f.foto)}" data-ampliar><img src="${mini(f.foto)}" data-full="${foto(f.foto)}" alt="${f.alt}" loading="lazy" width="500" height="500"></a>`
   });
 }
