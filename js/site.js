@@ -100,10 +100,16 @@ function montarGrade({ grade, filtros, botaoMais, itens, porVez, primeiraVez, ca
   const qtd = v => (typeof v === 'function' ? v() : v);
   const inicial = () => qtd(primeiraVez || porVez);
   let categoria = categoriaInicial, limite = inicial();
+  const textoMais = botaoMais ? botaoMais.textContent : '';
+  let tudoAberto = false;
   function atualizar() {
     const lista = itens.filter(it => !categoria || it.cats.includes(categoria));
     grade.innerHTML = lista.slice(0, limite).map(desenhar).join('');
-    if (botaoMais) botaoMais.hidden = limite >= lista.length;
+    if (!botaoMais) return;
+    // Quando tudo já apareceu, o botão vira "Ver Menos" (some se a categoria cabe numa linha)
+    tudoAberto = limite >= lista.length;
+    botaoMais.hidden = tudoAberto && lista.length <= inicial();
+    botaoMais.textContent = tudoAberto ? 'Ver Menos' : textoMais;
   }
   if (filtros) {
     filtros.addEventListener('click', e => {
@@ -115,7 +121,16 @@ function montarGrade({ grade, filtros, botaoMais, itens, porVez, primeiraVez, ca
       atualizar();
     });
   }
-  if (botaoMais) botaoMais.addEventListener('click', () => { limite += qtd(porVez); atualizar(); });
+  if (botaoMais) botaoMais.addEventListener('click', () => {
+    if (tudoAberto) {
+      limite = inicial();
+      atualizar();
+      (filtros || grade).scrollIntoView({ behavior: 'smooth', block: 'center' });
+    } else {
+      limite += qtd(porVez);
+      atualizar();
+    }
+  });
   atualizar();
 }
 

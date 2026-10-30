@@ -280,3 +280,4 @@ section { scroll-margin-top: 90px; }
   .titulo-duplo h1 { font-size: 26px; }
   .catalogo { grid-template-columns: repeat(2, 1fr); gap: 12px; }
 }
+.botao[hidden] { display: none !important; }
