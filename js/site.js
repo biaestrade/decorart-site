@@ -145,7 +145,10 @@ const galeria = document.querySelector('.galeria');
 if (galeria && window.FOTOS) {
   const filtros = document.querySelector('.filtros');
   filtros.innerHTML = window.CATEGORIAS.map((c, i) => `<li><button class="${i === 0 ? 'ativo' : ''}" data-cat="${c}">${c}</button></li>`).join('');
-  const itens = window.FOTOS.map(f => ({ ...f, cats: [f.cat] })).sort(() => Math.random() - .5);
+  // Fotos mais novas (pasta ANO/MES mais recente) sempre primeiro; dentro do mesmo mês, embaralhadas
+  const mes = f => f.foto.slice(0, 7);
+  const itens = window.FOTOS.map(f => ({ ...f, cats: [f.cat], sorteio: Math.random() }))
+    .sort((x, y) => mes(y).localeCompare(mes(x)) || x.sorteio - y.sorteio);
   montarGrade({
     grade: galeria, filtros, botaoMais: document.querySelector('#galeria-mais'),
     // Mostra só a primeira linha; cada "Veja Mais" acrescenta mais duas linhas
