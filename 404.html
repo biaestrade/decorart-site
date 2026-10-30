@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Decorart</title>
+<script>
+// Links antigos do WordPress que não existem mais levam para a página certa
+(function(){
+  var p = location.pathname.toLowerCase();
+  var destino = '/';
+  if (p.indexOf('/papeldeparede') === 0 || p.indexOf('papel') >= 0) destino = '/papeldeparede/';
+  else if (p.indexOf('decaranova') >= 0 || p.indexOf('promo') >= 0) destino = '/decaranova/';
+  location.replace(destino);
+})();
+</script>
+<style>body{margin:0;min-height:100vh;display:grid;place-items:center;font-family:Montserrat,Arial,sans-serif;background:#2E442D;color:#fff;text-align:center;padding:28px}a{color:#B5D8B3}</style>
+</head>
+<body>
+<p>Esta página mudou de endereço. <a href="/">Ir para o site da Decorart</a></p>
+</body>
+</html>

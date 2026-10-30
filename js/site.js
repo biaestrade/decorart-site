@@ -2,6 +2,8 @@
 const RAIZ = document.documentElement.dataset.raiz || '';
 const ANTIGO = 'https://decorartpapeisepisos.com.br/wp-content/uploads/';
 const foto = caminho => RAIZ + 'img/' + caminho;
+// Miniatura leve (500px, .webp) usada nas grades; a foto grande abre ao clicar
+const mini = caminho => RAIZ + 'img/mini/' + caminho.replace(/\.[a-z0-9]+$/i, '.webp');
 
 // Enquanto as fotos não estiverem copiadas para img/, mostra a do site antigo.
 function fotoAntiga(src) {
@@ -9,6 +11,7 @@ function fotoAntiga(src) {
   return i >= 0 ? ANTIGO + src.slice(i + 4) : null;
 }
 function socorro(img) {
+  if (img.dataset.full && !img.dataset.tentouFull) { img.dataset.tentouFull = '1'; img.src = img.dataset.full; return; }
   if (img.dataset.tentou) return;
   img.dataset.tentou = '1';
   const alt = fotoAntiga(img.getAttribute('src') || '');
@@ -67,7 +70,7 @@ let grupo = [], atual = 0;
 function mostrar(i) {
   atual = (i + grupo.length) % grupo.length;
   const img = grupo[atual].querySelector('img');
-  fotoGrande.src = img.currentSrc || img.src;
+  fotoGrande.src = grupo[atual].getAttribute('href') || img.currentSrc || img.src;
   fotoGrande.alt = img.alt;
   legenda.textContent = grupo[atual].dataset.legenda || '';
 }
@@ -123,7 +126,7 @@ if (galeria && window.FOTOS) {
   montarGrade({
     grade: galeria, filtros, botaoMais: document.querySelector('#galeria-mais'),
     itens, porVez: 12, categoriaInicial: window.CATEGORIAS[0],
-    desenhar: f => `<a href="${foto(f.foto)}" data-ampliar><img src="${foto(f.foto)}" alt="${f.alt}" loading="lazy"></a>`
+    desenhar: f => `<a href="${foto(f.foto)}" data-ampliar><img src="${mini(f.foto)}" data-full="${foto(f.foto)}" alt="${f.alt}" loading="lazy" width="500" height="500"></a>`
   });
 }
 
@@ -136,7 +139,7 @@ if (catalogo && window.CATALOGO) {
   montarGrade({
     grade: catalogo, filtros, botaoMais: document.querySelector('#ver-mais'),
     itens: window.CATALOGO.map(m => ({ ...m, cats: m.cat || [] })), porVez: 40, categoriaInicial: null,
-    desenhar: m => `<figure><a href="${foto(m.foto)}" data-ampliar data-legenda="${m.nome}"><img src="${foto(m.foto)}" alt="Papel de parede ${m.nome}" loading="lazy"></a><figcaption>${m.nome}</figcaption></figure>`
+    desenhar: m => `<figure><a href="${foto(m.foto)}" data-ampliar data-legenda="${m.nome}"><img src="${mini(m.foto)}" data-full="${foto(m.foto)}" alt="Papel de parede ${m.nome}" loading="lazy" width="500" height="500"></a><figcaption>${m.nome}</figcaption></figure>`
   });
 }
 
@@ -148,4 +151,13 @@ document.querySelectorAll('.abas-info').forEach(caixa => {
     caixa.querySelectorAll('.botoes button').forEach(x => x.classList.toggle('ativa', x === b));
     caixa.querySelectorAll('.painel').forEach(p => { p.hidden = p.id !== b.dataset.painel; });
   });
+});
+
+// Clique em qualquer botão de WhatsApp vira um evento no Google Tag Manager
+// (nome do evento: whatsapp_click), para usar como conversão no Google Ads/Analytics.
+window.dataLayer = window.dataLayer || [];
+document.addEventListener('click', e => {
+  const a = e.target.closest('a[href*="wa.me"]');
+  if (!a) return;
+  window.dataLayer.push({ event: 'whatsapp_click', pagina: location.pathname, botao: (a.textContent || a.getAttribute('aria-label') || '').trim().slice(0, 60) });
 });
