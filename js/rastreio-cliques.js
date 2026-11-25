@@ -7,7 +7,7 @@
 //
 // Não manda nome, telefone nem nada que identifique a pessoa.
 (function () {
-  var RECEPTOR = 'URL_DO_RECEPTOR';
+  var RECEPTOR = 'https://script.google.com/macros/s/AKfycbwf-OcvhC2dyk9qqKLhKsP4t-60sqDlRwcrurrbnWNDD5lap-VPQLkfU6YB7vtGA5_yTQ/exec';
   var CHAVE = 'decorart_origem';
   var VALIDADE_DIAS = 90;
   var CAMPOS = ['gclid', 'gbraid', 'wbraid', 'fbclid', 'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'];
