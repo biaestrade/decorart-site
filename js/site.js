@@ -109,7 +109,7 @@ function montarGrade({ grade, filtros, botaoMais, itens, porVez, primeiraVez, ca
     // Quando tudo já apareceu, o botão vira "Ver Menos" (some se a categoria cabe numa linha)
     tudoAberto = limite >= lista.length;
     botaoMais.hidden = tudoAberto && lista.length <= inicial();
-    botaoMais.textContent = tudoAberto ? 'Ver Menos' : textoMais;
+    botaoMais.textContent = tudoAberto ? 'Ver menos' : textoMais;
   }
   if (filtros) {
     filtros.addEventListener('click', e => {
