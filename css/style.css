@@ -296,3 +296,4 @@ section { scroll-margin-top: 90px; }
   background: var(--verde); color: var(--branco); box-shadow: none;
 }
 #galeria-mais.botao.verde:hover { background: var(--verde-hover); }
+.rodape .link-privacidade { font-size: 13px; opacity: .8; }
