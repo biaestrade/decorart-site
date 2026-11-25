@@ -16,10 +16,13 @@
   var css = [
     '.nl-fundo{position:fixed;inset:0;z-index:90;background:rgba(20,32,19,.55);display:flex;align-items:center;justify-content:center;padding:16px;opacity:0;transition:opacity .25s}',
     '.nl-fundo.aberto{opacity:1}',
-    '.nl-caixa{position:relative;width:100%;max-width:440px;background:#fff;color:var(--verde,#2E442D);border-radius:14px;padding:34px 28px 24px;box-shadow:0 18px 50px rgba(0,0,0,.3);text-align:center;font-family:Montserrat,Arial,sans-serif;transform:translateY(12px);transition:transform .25s}',
+    '.nl-caixa{position:relative;display:flex;width:100%;max-width:760px;background:#fff;color:var(--verde,#2E442D);border-radius:14px;overflow:hidden;box-shadow:0 18px 50px rgba(0,0,0,.3);font-family:Montserrat,Arial,sans-serif;transform:translateY(12px);transition:transform .25s}',
     '.nl-fundo.aberto .nl-caixa{transform:none}',
-    '.nl-fechar{position:absolute;top:8px;right:10px;width:36px;height:36px;border:0;background:none;font-size:28px;line-height:1;color:#777;cursor:pointer}',
-    '.nl-caixa h2{font-size:22px;line-height:1.3;margin:0 0 8px;font-weight:700}',
+    '.nl-foto{flex:0 0 42%;background:#E9E1D3 url(/img/newsletter/popup-sala-jantar.webp) center/cover no-repeat;min-height:420px}',
+    '.nl-corpo{flex:1;padding:40px 32px 26px;text-align:center;display:flex;flex-direction:column;justify-content:center}',
+    '.nl-marca{display:block;font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#A0673F;margin-bottom:10px}',
+    '.nl-fechar{position:absolute;top:10px;right:10px;width:36px;height:36px;border:0;border-radius:50%;background:rgba(255,255,255,.92);font-size:26px;line-height:1;color:#555;cursor:pointer;z-index:1}',
+    '.nl-caixa h2{font-size:24px;line-height:1.3;margin:0 0 8px;font-weight:700}',
     '.nl-caixa p.nl-sub{font-size:15px;margin:0 0 18px;color:#4C664B}',
     '.nl-form{display:flex;flex-direction:column;gap:10px}',
     '.nl-form input[type=text],.nl-form input[type=email]{width:100%;padding:13px 14px;border:1px solid #B9C7B8;border-radius:8px;font:inherit;font-size:15px;color:#2E442D;background:#fff}',
@@ -29,7 +32,7 @@
     '.nl-form button:disabled{opacity:.6;cursor:default}',
     '.nl-aviso{font-size:12px;color:#777;margin:12px 0 0;line-height:1.5}',
     '.nl-aviso a{color:#4C664B}',
-    '.nl-erro{font-size:13px;color:#B3261E;min-height:0;margin:0}',
+    '.nl-erro{font-size:13px;color:#B3261E;min-height:0;margin:0}','.nl-erro:empty{display:none}',
     '.nl-mel{position:absolute!important;left:-9999px!important;width:1px;height:1px;opacity:0}',
     '.nl-ok{font-size:16px;padding:10px 0 4px}',
     '.nl-faixa{background:var(--verde-escuro,#1F331E);color:#fff;padding:28px 0}',
@@ -45,6 +48,7 @@
     '.nl-faixa .nl-aviso{color:#cfd9ce;flex-basis:100%;margin:0}',
     '.nl-faixa .nl-aviso a{color:#fff}',
     '.nl-faixa .nl-erro{color:#ffb4ab;flex-basis:100%}',
+    '@media (max-width:640px){.nl-caixa{flex-direction:column;max-width:440px;max-height:calc(100vh - 32px);overflow-y:auto}.nl-foto{flex:none;min-height:0;height:130px;background-position:center 35%}.nl-corpo{padding:18px 20px 16px}.nl-marca{margin-bottom:6px;font-size:11px}.nl-caixa h2{font-size:20px;margin-bottom:6px}.nl-caixa p.nl-sub{font-size:14px;margin-bottom:14px}.nl-form{gap:8px}.nl-form input[type=text],.nl-form input[type=email]{padding:11px 13px}.nl-form button{padding:12px}.nl-aviso{margin-top:6px}}',
     '@media (max-width:760px){.nl-faixa .container{flex-direction:column;align-items:stretch;text-align:center}.nl-faixa .container>div{max-width:none;flex:none}.nl-faixa .nl-form{flex-direction:column;flex-basis:auto}.nl-faixa .nl-form input[type=text],.nl-faixa .nl-form input[type=email]{flex:none;width:100%}}'
   ].join('\n');
   var estilo = document.createElement('style');
@@ -134,7 +138,8 @@
     pop.setAttribute('aria-modal', 'true');
     pop.setAttribute('aria-labelledby', 'nl-titulo');
     pop.innerHTML = '<div class="nl-caixa"><button type="button" class="nl-fechar" aria-label="Fechar">&times;</button>' +
-      '<h2 id="nl-titulo">' + TITULO + '</h2><p class="nl-sub">' + SUB + '</p>' + formulario('popup') + '</div>';
+      '<div class="nl-foto" role="img" aria-label="Sala de jantar com papel de parede texturizado"></div>' +
+      '<div class="nl-corpo"><span class="nl-marca">Newsletter Decorart</span><h2 id="nl-titulo">' + TITULO + '</h2><p class="nl-sub">' + SUB + '</p>' + formulario('popup') + '</div></div>';
     document.body.appendChild(pop);
     requestAnimationFrame(function () { pop.classList.add('aberto'); });
     pop.addEventListener('click', function (e) {
@@ -165,6 +170,7 @@
     document.removeEventListener('mouseout', aoSair);
   }
   if (podeMostrar()) {
+    new Image().src = '/img/newsletter/popup-sala-jantar.webp';   // já carrega a foto do pop-up
     timer = setTimeout(abrir, ESPERA_MS);
     // Rolagem só conta depois de 8 s, para não abrir em quem rola rápido logo ao chegar
     setTimeout(function () {
