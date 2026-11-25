@@ -141,40 +141,65 @@ function colunas(grade) {
   return c || 6;
 }
 
-// Galeria da home: mosaico editorial (fotos de tamanhos diferentes, como numa revista)
-// Cada bloco de 13 fotos segue o mesmo desenho em 4 colunas; a foto "destaque": 1 abre o bloco em tamanho grande.
-const MOSAICO = ['m-grande', '', '', '', 'm-alta', 'm-larga', '', '', 'm-alta', 'm-grande', 'm-alta', '', 'm-larga'];
-function mosaico(grade) {
-  const fotos = [...grade.children];
-  const cheios = Math.floor(fotos.length / 13) * 13;
-  const resto = fotos.length - cheios;
-  fotos.forEach((el, i) => {
-    let classe = '';
-    if (i < cheios) classe = MOSAICO[i % 13];
-    else if (resto >= 7 && i - cheios < 7) classe = MOSAICO[i - cheios];
-    if (classe) el.classList.add(classe);
-  });
-}
+// Galeria da home: mosaico de 5 fotos por vez (1 grande + 4 menores), com setas para os lados
 const galeria = document.querySelector('.galeria');
 if (galeria && window.FOTOS) {
   const filtros = document.querySelector('.filtros');
-  filtros.innerHTML = window.CATEGORIAS.map((c, i) => `<li><button class="${i === 0 ? 'ativo' : ''}" data-cat="${c}">${c}</button></li>`).join('');
-  // Ordem de cada categoria: destaque 1 primeiro, destaque 2 na segunda foto grande (10ª posição), o resto na ordem do arquivo
-  const itens = [];
-  window.CATEGORIAS.forEach(cat => {
-    const doCat = window.FOTOS.filter(f => f.cat === cat);
-    const d1 = doCat.filter(f => f.destaque === 1), d2 = doCat.filter(f => f.destaque === 2);
-    const resto = doCat.filter(f => !f.destaque);
-    const lista = [...d1, ...resto];
-    lista.splice(Math.min(9, lista.length), 0, ...d2);
-    lista.forEach(f => itens.push({ ...f, cats: [f.cat] }));
-  });
+  const contador = document.querySelector('.galeria-contador');
+  const setaAnt = document.querySelector('.galeria-seta.anterior');
+  const setaProx = document.querySelector('.galeria-seta.proxima');
+  const POR_PAGINA = 5;
   const singular = { 'Papel de Parede': 'Papel de parede', 'Cortinas': 'Cortina', 'Persianas': 'Persiana', 'Pisos': 'Piso' };
-  montarGrade({
-    grade: galeria, filtros, botaoMais: document.querySelector('#galeria-mais'),
-    itens, primeiraVez: 13, porVez: 13, categoriaInicial: window.CATEGORIAS[0], depois: mosaico,
-    desenhar: f => `<a href="${foto(f.foto)}" data-ampliar data-legenda="${f.legenda || singular[f.cat] || f.cat}"><img src="${foto(f.foto)}" alt="${f.alt}" loading="lazy"><span class="legenda-foto">${f.legenda || singular[f.cat] || f.cat}</span></a>`
+  filtros.innerHTML = window.CATEGORIAS.map((c, i) => `<li><button class="${i === 0 ? 'ativo' : ''}" data-cat="${c}">${c}</button></li>`).join('');
+  let categoria = window.CATEGORIAS[0], pagina = 0, paginas = 1;
+
+  function fotosDa(cat) {
+    const doCat = window.FOTOS.filter(f => f.cat === cat);
+    return [...doCat.filter(f => f.destaque), ...doCat.filter(f => !f.destaque)];
+  }
+  function desenhar() {
+    const fotos = fotosDa(categoria);
+    paginas = Math.ceil(fotos.length / POR_PAGINA);
+    let html = '';
+    for (let p = 0; p < paginas; p++) {
+      html += '<div class="galeria-pagina">' + fotos.slice(p * POR_PAGINA, p * POR_PAGINA + POR_PAGINA).map((f, i) => {
+        const leg = f.legenda || singular[f.cat] || f.cat;
+        return `<a href="${foto(f.foto)}" data-ampliar data-legenda="${leg}"${i === 0 ? ' class="m-grande"' : ''}><img src="${i === 0 ? foto(f.foto) : mini(f.foto)}" data-full="${foto(f.foto)}" alt="${f.alt}" loading="lazy"><span class="legenda-foto">${leg}</span></a>`;
+      }).join('') + '</div>';
+    }
+    galeria.innerHTML = '<div class="galeria-trilho">' + html + '</div>';
+    pagina = 0; mover();
+  }
+  function mover() {
+    const trilho = galeria.querySelector('.galeria-trilho');
+    trilho.style.transform = `translateX(-${pagina * 100}%)`;
+    setaAnt.disabled = pagina === 0;
+    setaProx.disabled = pagina >= paginas - 1;
+    galeria.querySelectorAll('.galeria-pagina').forEach((pg, i) => pg.setAttribute('aria-hidden', i !== pagina));
+    contador.textContent = paginas > 1 ? `${pagina + 1} / ${paginas}` : '';
+  }
+  setaAnt.addEventListener('click', () => { if (pagina > 0) { pagina--; mover(); } });
+  setaProx.addEventListener('click', () => { if (pagina < paginas - 1) { pagina++; mover(); } });
+  filtros.addEventListener('click', e => {
+    const b = e.target.closest('button');
+    if (!b) return;
+    filtros.querySelectorAll('button').forEach(x => x.classList.toggle('ativo', x === b));
+    categoria = b.dataset.cat;
+    desenhar();
   });
+  // Arrastar com o dedo no celular
+  let inicioX = null;
+  galeria.addEventListener('touchstart', e => { inicioX = e.touches[0].clientX; }, { passive: true });
+  galeria.addEventListener('touchend', e => {
+    if (inicioX === null) return;
+    const dx = e.changedTouches[0].clientX - inicioX;
+    inicioX = null;
+    if (Math.abs(dx) < 40) return;
+    if (dx < 0 && pagina < paginas - 1) pagina++;
+    else if (dx > 0 && pagina > 0) pagina--;
+    mover();
+  });
+  desenhar();
 }
 
 // Catálogo de papel de parede: filtros por estilo, 40 por vez

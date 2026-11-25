@@ -185,8 +185,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <p class="rotulo centro">Ambientes que entregamos</p>
       <h2 class="titulo-secao">Nossos trabalhos</h2>
       <ul class="filtros filtros-catalogo"></ul>
-      <div class="galeria" data-grupo></div>
-      <p class="centro"><button id="galeria-mais" class="botao verde">Ver mais</button></p>
+      <div class="galeria-carrossel">
+        <button class="galeria-seta anterior" type="button" aria-label="Fotos anteriores"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15.4 4.6L14 3.2 5.2 12l8.8 8.8 1.4-1.4L8 12z"/></svg></button>
+        <div class="galeria" data-grupo></div>
+        <button class="galeria-seta proxima" type="button" aria-label="Próximas fotos"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.6 4.6L10 3.2l8.8 8.8L10 20.8l-1.4-1.4L16 12z"/></svg></button>
+      </div>
+      <p class="galeria-contador" aria-live="polite"></p>
     </div>
   </section>
 
