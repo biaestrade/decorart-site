@@ -96,7 +96,7 @@ document.addEventListener('keydown', e => {
 });
 
 // Filtros + "Veja mais" (usado na galeria da home e no catálogo)
-function montarGrade({ grade, filtros, botaoMais, itens, porVez, primeiraVez, categoriaInicial, desenhar }) {
+function montarGrade({ grade, filtros, botaoMais, itens, porVez, primeiraVez, categoriaInicial, desenhar, depois }) {
   const qtd = v => (typeof v === 'function' ? v() : v);
   const inicial = () => qtd(primeiraVez || porVez);
   let categoria = categoriaInicial, limite = inicial();
@@ -105,6 +105,7 @@ function montarGrade({ grade, filtros, botaoMais, itens, porVez, primeiraVez, ca
   function atualizar() {
     const lista = itens.filter(it => !categoria || it.cats.includes(categoria));
     grade.innerHTML = lista.slice(0, limite).map(desenhar).join('');
+    if (depois) depois(grade);
     if (!botaoMais) return;
     // Quando tudo já apareceu, o botão vira "Ver Menos" (some se a categoria cabe numa linha)
     tudoAberto = limite >= lista.length;
@@ -140,20 +141,39 @@ function colunas(grade) {
   return c || 6;
 }
 
-// Galeria da home: fotos embaralhadas, 12 por vez, começa em Papel de Parede
+// Galeria da home: mosaico editorial (fotos de tamanhos diferentes, como numa revista)
+// Cada bloco de 13 fotos segue o mesmo desenho em 4 colunas; a foto "destaque": 1 abre o bloco em tamanho grande.
+const MOSAICO = ['m-grande', '', '', '', 'm-alta', 'm-larga', '', '', 'm-alta', 'm-grande', 'm-alta', '', 'm-larga'];
+function mosaico(grade) {
+  const fotos = [...grade.children];
+  const cheios = Math.floor(fotos.length / 13) * 13;
+  const resto = fotos.length - cheios;
+  fotos.forEach((el, i) => {
+    let classe = '';
+    if (i < cheios) classe = MOSAICO[i % 13];
+    else if (resto >= 7 && i - cheios < 7) classe = MOSAICO[i - cheios];
+    if (classe) el.classList.add(classe);
+  });
+}
 const galeria = document.querySelector('.galeria');
 if (galeria && window.FOTOS) {
   const filtros = document.querySelector('.filtros');
   filtros.innerHTML = window.CATEGORIAS.map((c, i) => `<li><button class="${i === 0 ? 'ativo' : ''}" data-cat="${c}">${c}</button></li>`).join('');
-  // Fotos mais novas (pasta ANO/MES mais recente) sempre primeiro; dentro do mesmo mês, embaralhadas
-  const mes = f => f.foto.slice(0, 7);
-  const itens = window.FOTOS.map(f => ({ ...f, cats: [f.cat], sorteio: Math.random() }))
-    .sort((x, y) => mes(y).localeCompare(mes(x)) || x.sorteio - y.sorteio);
+  // Ordem de cada categoria: destaque 1 primeiro, destaque 2 na segunda foto grande (10ª posição), o resto na ordem do arquivo
+  const itens = [];
+  window.CATEGORIAS.forEach(cat => {
+    const doCat = window.FOTOS.filter(f => f.cat === cat);
+    const d1 = doCat.filter(f => f.destaque === 1), d2 = doCat.filter(f => f.destaque === 2);
+    const resto = doCat.filter(f => !f.destaque);
+    const lista = [...d1, ...resto];
+    lista.splice(Math.min(9, lista.length), 0, ...d2);
+    lista.forEach(f => itens.push({ ...f, cats: [f.cat] }));
+  });
+  const singular = { 'Papel de Parede': 'Papel de parede', 'Cortinas': 'Cortina', 'Persianas': 'Persiana', 'Pisos': 'Piso' };
   montarGrade({
     grade: galeria, filtros, botaoMais: document.querySelector('#galeria-mais'),
-    // Mostra só a primeira linha; cada "Veja Mais" acrescenta mais duas linhas
-    itens, primeiraVez: () => colunas(galeria), porVez: () => colunas(galeria) * 2, categoriaInicial: window.CATEGORIAS[0],
-    desenhar: f => `<a href="${foto(f.foto)}" data-ampliar><img src="${mini(f.foto)}" data-full="${foto(f.foto)}" alt="${f.alt}" loading="lazy" width="500" height="500"></a>`
+    itens, primeiraVez: 13, porVez: 13, categoriaInicial: window.CATEGORIAS[0], depois: mosaico,
+    desenhar: f => `<a href="${foto(f.foto)}" data-ampliar data-legenda="${f.legenda || singular[f.cat] || f.cat}"><img src="${foto(f.foto)}" alt="${f.alt}" loading="lazy"><span class="legenda-foto">${f.legenda || singular[f.cat] || f.cat}</span></a>`
   });
 }
 

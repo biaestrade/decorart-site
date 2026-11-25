@@ -117,15 +117,22 @@ section { scroll-margin-top: 90px; }
 }
 .filtros button:hover { border-color: var(--verde); }
 .filtros button.ativo { background: var(--verde); border-color: var(--verde); color: var(--off-white); }
-.galeria { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; }
-.galeria a { display: block; overflow: hidden; border-radius: 4px; aspect-ratio: 1 / 1; background: var(--bege); position: relative; animation: aparecer .4s ease; }
-.galeria img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s; }
-.galeria a::after {
-  content: ''; position: absolute; inset: 0; background: rgba(47,69,48,.45) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23F6F2EA'%3E%3Cpath d='M10 2a8 8 0 016.3 12.9l5.4 5.4-1.4 1.4-5.4-5.4A8 8 0 1110 2zm0 2a6 6 0 100 12 6 6 0 000-12zm1 2v3h3v2h-3v3H9v-3H6V9h3V6h2z'/%3E%3C/svg%3E") center / 32px no-repeat;
-  opacity: 0; transition: opacity .3s;
+/* Mosaico editorial: 4 colunas, algumas fotos ocupam 2 colunas e/ou 2 linhas */
+.galeria { display: grid; grid-template-columns: repeat(4, 1fr); grid-auto-rows: clamp(150px, 17vw, 230px); grid-auto-flow: dense; gap: 10px; }
+.galeria a { display: block; overflow: hidden; border-radius: 4px; background: var(--bege); position: relative; animation: aparecer .4s ease; }
+.galeria a.m-grande { grid-column: span 2; grid-row: span 2; }
+.galeria a.m-alta { grid-row: span 2; }
+.galeria a.m-larga { grid-column: span 2; }
+.galeria img { width: 100%; height: 100%; object-fit: cover; transition: transform .6s ease; }
+.galeria a:hover img { transform: scale(1.04); }
+.galeria .legenda-foto {
+  position: absolute; left: 12px; bottom: 12px; max-width: calc(100% - 24px);
+  background: var(--off-white); color: var(--verde); border-radius: 4px; padding: 7px 11px;
+  font-size: 10.5px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; line-height: 1.35;
+  opacity: 0; transform: translateY(6px); transition: opacity .3s, transform .3s;
 }
-.galeria a:hover::after { opacity: 1; }
-.galeria a:hover img { transform: scale(1.05); }
+.galeria a:hover .legenda-foto, .galeria a:focus-visible .legenda-foto { opacity: 1; transform: none; }
+@media (hover: none) { .galeria a.m-grande .legenda-foto, .galeria a.m-larga .legenda-foto { opacity: 1; transform: none; } }
 @keyframes aparecer { from { opacity: 0; transform: scale(.97); } to { opacity: 1; transform: none; } }
 .centro .botao.verde { margin-top: 36px; }
 
@@ -250,7 +257,6 @@ section { scroll-margin-top: 90px; }
 
 /* ---------- Tablet e celular ---------- */
 @media (max-width: 1024px) {
-  .galeria { grid-template-columns: repeat(3, 1fr); }
   .menu a { padding: 12px clamp(8px, 1.1vw, 15px); font-size: 12px; }
   .passos { grid-template-columns: 1fr; max-width: 560px; margin-left: auto; margin-right: auto; }
 }
@@ -283,8 +289,11 @@ section { scroll-margin-top: 90px; }
   .rodape .container { flex-direction: column; text-align: center; padding-right: clamp(28px, 6vw, 72px); }
   .rodape .contatos { text-align: center; }
 }
+@media (max-width: 700px) {
+  .galeria { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 40vw; gap: 6px; }
+  .galeria .legenda-foto { left: 8px; bottom: 8px; padding: 5px 8px; font-size: 9px; letter-spacing: .14em; }
+}
 @media (max-width: 600px) {
-  .galeria { gap: 4px; }
   .filtros { gap: 6px; }
   .filtros button { font-size: 11px; padding: 8px 13px; letter-spacing: .12em; }
   .botao { font-size: 14px; padding: 14px 24px; }
